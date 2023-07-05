@@ -1,0 +1,10 @@
+.btn {
+    pointer-events: none;
+    opacity: .4;
+    transition: all .45s ease-in-out;
+}
+
+.activeBtn {
+    opacity: 1;
+    pointer-events: all;
+}
