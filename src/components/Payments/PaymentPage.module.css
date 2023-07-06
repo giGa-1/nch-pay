@@ -11,10 +11,11 @@
 
 .liqPayComp {
     position: fixed;
-  
-    background-color: #fff;
+    background-color: #ffffff00;
     z-index: 1000;
     width: 100vw;
+    height: 100vh;
+    overflow-y: scroll;
 }
 
 
