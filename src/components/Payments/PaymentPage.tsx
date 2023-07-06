@@ -2,10 +2,12 @@
 import {useSearchParams} from 'next/navigation';
 import React, { FC, useEffect, useState } from 'react';
 import cl from './PaymentPage.module.css';
-import {PrimePayHelper} from '@/helpers/PrimePay';
+import { getIPLocation } from 'react-ip-location';
+import {dataEncode, signatureGen} from '@/helpers/LiqPay';
+import Widjet from './Widjet';
 
 interface Props {
-    infoObj: GLink
+    infoObj: string
 }
 
 const PaymentPage: FC<Props> = ({infoObj}) => {
@@ -13,40 +15,50 @@ const PaymentPage: FC<Props> = ({infoObj}) => {
     const [isWaiting ,setIsWaiting] = useState<boolean>(false);
 
     const paymentActivate = async () => {
-        if(infoObj.payment === 'liqpay') {
-            alert('Liqpay')
-        } else if (infoObj.payment === 'primepay') {
-            alert('prime')
-            const newForm = new FormData();
-            const date = Date.now();
-            newForm.append('action', 'initPayment');
-            newForm.append('project', '2405');
-            newForm.append('sum', infoObj.count+'');
-            newForm.append('currency', 'USD');
-            newForm.append('innerID', infoObj.date+'');
-            newForm.append('email', 'testestestestest758@gmail.com');
-            newForm.append('sign', PrimePayHelper(`b2P4dt4CGMinitPayment2405${infoObj.count}USD${infoObj.date}testestestestest758@gmail.com`));
-            newForm.append('comment', 'trade');
-    
-            const response = await fetch('/api/prime', {
-                method: 'POST',
-                referrerPolicy:'no-referrer',
-                body: newForm,
-            });
-            const data = await response.json();
-            if(data !== 'BAD') {
-                setIsWaiting(true)
-                localStorage.setItem('orderId', `${data}`.split('.io/')[1])
-                window.open(data, "_blank");
-            } 
-        }
+        
     }
+    
+    const [res, setRes] = useState<string>(''); 
+    const [initial, setInitial] = useState('')
+    const [isActiveLiq, setIsActiveLiq] = useState<boolean>(false)
+    const [isResultLiq, setIsResultLiq] = useState<boolean | null>(null)
+    const [isCode, setIsCode]  = useState<string>('')
 
-    console.log(infoObj)
+    const handleSubmitRes = async (siteTag : 'site_sale_done' | 'site_sale_cancel', id: number,price:string) => {
+        const response = await fetch('/api/change', {
+            method:'POST',
+            referrerPolicy:'no-referrer',
+            body: JSON.stringify({
+              site:siteTag,
+              idLead: id,
+              price:price
+            })
+          })
+          const data = await response.json();
+          console.log(data)
+    }
+    useEffect(()=>{
+        setTimeout(()=>setRes('asd'), 10000)
+    },[])
+
+      useEffect(()=>{
+        const date = Date.now()
+        Widjet(dataEncode(JSON.stringify({version: 3,public_key: 'i57199305658',action:'pay',amount:JSON.parse(atob(infoObj)).count,currency: 'USD',description:'Course New Chapter Test',order_id:date,})), signatureGen(JSON.stringify({version: 3,public_key: 'i57199305658',action:'pay',amount:JSON.parse(atob(infoObj)).count,currency: 'USD',description:'Course New Chapter Test',order_id:date,})), handleSubmitRes, +(JSON.parse(atob(infoObj)).lead.replace('https://newchapterweb3.amocrm.ru/leads/detail/','')), JSON.parse(atob(infoObj)).count)
+      },[res])
+    
+    
+
+    // console.log(infoObj)
     return <section>
-        <h1 className={cl.hiTitle}>Welcome to Payment Page</h1>
-        <div className={cl.btnStart} onClick={e=>paymentActivate()}>
-            Click To Continue
+        <div  className={cl.liqBuy}>
+            <div className={cl.loaderBlock}>
+                <div className={[cl.loader, cl.loaderOne].join(' ')}></div>
+                <div className={[cl.loader, cl.loaderTwo].join(' ')}></div>
+                <div className={[cl.loader, cl.loaderThree].join(' ')}></div>
+            </div>
+            <div id='liqpay_checkout' className={cl.liqPayComp}>
+
+            </div>
         </div>
     </section>
 }

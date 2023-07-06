@@ -2,7 +2,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/auth";
 import { db } from "@/libs/db";
-import crypto from 'crypto';
 
 export async function POST(req:Request) {
     try {
@@ -10,17 +9,17 @@ export async function POST(req:Request) {
     
         const datestemp = Date.now();
 
-        const session = await getServerSession(authOptions);
-        if(!session) return new Response(JSON.stringify('Unauthorized'), {status: 401});
+        // const session = await getServerSession(authOptions);
+        // if(!session) return new Response(JSON.stringify('Unauthorized'), {status: 401});
         
-        const infoSend: GLink = {
+        const infoSend = {
             ...body,
             date: datestemp+''
         }   
 
         await db.zadd(`links:start`,{nx:true}, {
             score: datestemp,
-            member: JSON.stringify(infoSend)
+            member: JSON.stringify(btoa(JSON.stringify(infoSend)))
         })
 
         return new Response(JSON.stringify(req.url.split('://')[0]+'://'+req.url.split('://')[1].split('/')[0]+'/order/custom/'+btoa(JSON.stringify(infoSend))))

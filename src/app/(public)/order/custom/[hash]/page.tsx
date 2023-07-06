@@ -8,7 +8,7 @@ interface props {
 const page: FC<props> = ({ params }) => {
 
   return <main>
-    <PaymentPage infoObj={JSON.parse(atob(params.hash.replace('%3D', '=')))}/>  
+    <PaymentPage infoObj={params.hash.replace('%3D', '=')}/>  
   </main>
 }
 

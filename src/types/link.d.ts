@@ -1,8 +1,4 @@
 interface GLink  {
-    name?: string,
-    email:string,
-    payment:string,
-    phone:string,
+    lead:string,
     count:string,
-    date?: string, 
 }

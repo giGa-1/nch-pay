@@ -1,4 +1,5 @@
 import '@/styles/normalize.css'
+import Script from 'next/script';
 import '@/styles/globals.css'
 
 export const metadata = {
@@ -13,6 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Script src='https://static.liqpay.ua/libjs/checkout.js' async></Script>
       <body >{children}</body>
     </html>
   )
