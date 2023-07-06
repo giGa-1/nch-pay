@@ -38,17 +38,15 @@ const PaymentPage: FC<Props> = ({infoObj}) => {
           console.log(data)
     }
     useEffect(()=>{
-        setTimeout(()=>setRes('asd'), 10000)
+        setTimeout(()=>setRes('asd'), 3000)
     },[])
 
       useEffect(()=>{
-        const date = Date.now()
-        Widjet(dataEncode(JSON.stringify({version: 3,public_key: 'i57199305658',action:'pay',amount:JSON.parse(atob(infoObj)).count,currency: 'USD',description:'Course New Chapter Test',order_id:date,})), signatureGen(JSON.stringify({version: 3,public_key: 'i57199305658',action:'pay',amount:JSON.parse(atob(infoObj)).count,currency: 'USD',description:'Course New Chapter Test',order_id:date,})), handleSubmitRes, +(JSON.parse(atob(infoObj)).lead.replace('https://newchapterweb3.amocrm.ru/leads/detail/','')), JSON.parse(atob(infoObj)).count)
+        if(res) {
+          const date = Date.now()
+          Widjet(dataEncode(JSON.stringify({version: 3,public_key: 'i57199305658',action:'pay',amount:JSON.parse(atob(infoObj)).count,currency: 'USD',description:'Course New Chapter Test',order_id:date,})), signatureGen(JSON.stringify({version: 3,public_key: 'i57199305658',action:'pay',amount:JSON.parse(atob(infoObj)).count,currency: 'USD',description:'Course New Chapter Test',order_id:date,})), handleSubmitRes, +(JSON.parse(atob(infoObj)).lead.replace('https://newchapterweb3.amocrm.ru/leads/detail/','')), JSON.parse(atob(infoObj)).count)
+        }
       },[res])
-    
-    
-
-    // console.log(infoObj)
     return <section>
         <div  className={cl.liqBuy}>
             <div className={cl.loaderBlock}>

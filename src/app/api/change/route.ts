@@ -26,10 +26,10 @@ export async function POST(req:Request) {
                         body: JSON.stringify([{
                             "id":idLead,
                             "price":+(price),
-                            "_embedded": {
-                                "tags": [...leadData['_embedded']['tags'], {
+                            "_embedded":{
+                                "tags": [...leadData['_embedded']['tags'].map((el:{id:number,name:string})=>{return {id:el.id, name:el.name}}), {
                                     id:  site == 'pay_done' ? 181669 : site == 'pay_cancel' ? 181671 : 181671,
-                                    name: site
+                                    name: site,
                                 }]
                             }
                         }])
@@ -47,10 +47,10 @@ export async function POST(req:Request) {
                         body: JSON.stringify([{
                             "id":idLead,
                             "price":+(price),
-                            "_embedded": {
-                                "tags": [...leadData['_embedded']['tags'], {
+                            "_embedded":{
+                                "tags": [...leadData['_embedded']['tags'].map((el:{id:number,name:string})=>{return {id:el.id, name:el.name}}), {
                                     id:  site == 'pay_done' ? 181669 : site == 'pay_cancel' ? 181671 : 181671,
-                                    name: site
+                                    name: site,
                                 }]
                             }
                         }])
